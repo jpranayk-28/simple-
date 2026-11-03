@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Examination</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            text-align: center;
+        }
+
+        .container {
+            background-color: white;
+            width: 350px;
+            margin: 100px auto;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        input[type="text"], input[type="password"] {
+            padding: 10px;
+            width: 80%;
+            margin: 10px;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        p {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        #quiz {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="login">
+        <h2>Student Login</h2>
+
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+
+        <br>
+        <button onclick="startExam()">Login</button>
+    </div>
+
+    <div class="container" id="exam" style="display:none">
+
+        <h2>Online Examination</h2>
+        <h3 id="student"></h3>
+        <h3 id="timer">Time: 60</h3>
+
+        <form id="quiz">
+
+            <p>1. What is HTML?</p>
+            <input type="radio" name="q1" value="a"> Programming Language<br>
+            <input type="radio" name="q1" value="b"> Markup Language<br>
+            <input type="radio" name="q1" value="c"> Database<br>
+
+            <p>2. What is CSS used for?</p>
+            <input type="radio" name="q2" value="a"> Styling<br>
+            <input type="radio" name="q2" value="b"> Programming<br>
+            <input type="radio" name="q2" value="c"> Database<br>
+
+            <p>3. Which language is used for web scripting?</p>
+            <input type="radio" name="q3" value="a"> Java<br>
+            <input type="radio" name="q3" value="b"> C<br>
+            <input type="radio" name="q3" value="c"> JavaScript<br>
+
+            <br>
+            <button type="button" onclick="submitExam()">Submit Exam</button>
+
+        </form>
+    </div>
+
+    <div class="container" id="result" style="display:none">
+        <h2>Exam Result</h2>
+        <h3 id="score"></h3>
+    </div>
+
+    <script>
+        var time = 60;
+        var timer;
+
+        function startExam() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username == "" || password == "") {
+                alert("Please enter username and password");
+                return;
+            }
+
+            if (username == "student" && password == "1234") {
+
+                document.getElementById("login").style.display = "none";
+                document.getElementById("exam").style.display = "block";
+                document.getElementById("student").innerHTML = "Student: " + username;
+
+                timer = setInterval(function() {
+                    time--;
+                    document.getElementById("timer").innerHTML = "Time: " + time;
+
+                    if (time <= 0) {
+                        submitExam();
+                    }
+                }, 1000);
+
+            } else {
+                alert("Invalid Username or Password");
+            }
+        }
+
+        function submitExam() {
+            clearInterval(timer);
+
+            var score = 0;
+
+            if (document.querySelector('input[name="q1"]:checked')?.value == "b") {
+                score++;
+            }
+
+            if (document.querySelector('input[name="q2"]:checked')?.value == "a") {
+                score++;
+            }
+
+            if (document.querySelector('input[name="q3"]:checked')?.value == "c") {
+                score++;
+            }
+
+            document.getElementById("exam").style.display = "none";
+            document.getElementById("result").style.display = "block";
+
+            document.getElementById("score").innerHTML =
+                "Student: " + document.getElementById("username").value +
+                "<br>Your Score: " + score + " / 3";
+        }
+    </script>
+
+</body>
+</html>
